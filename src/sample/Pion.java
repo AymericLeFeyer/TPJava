@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
 import java.util.List;
 
 class Pion {
@@ -8,7 +10,7 @@ class Pion {
     private int y;
     private Color couleur;
 
-    static List<Pion> listPions;
+    static List<Pion> listPions = new ArrayList<Pion>();
 
     // Constructors
     public Pion(int x, int y, Color couleur) {
@@ -44,5 +46,19 @@ class Pion {
     }
 
     // Methods
+    static void initializePions() {
+        listPions.add(new Pion(1, 1, Color.BLUE));
+        listPions.add(new Pion(2, 1, Color.BLUE));
+        listPions.add(new Pion(3, 1, Color.BLUE));
+        listPions.add(new Pion(4, 1, Color.BLUE));
+        listPions.add(new Pion(5, 1, Color.BLUE));
+        listPions.add(new Pion(6, 1, Color.BLUE));
+        listPions.add(new Pion(1, 2, Color.BLUE));
+        listPions.add(new Pion(2, 2, Color.BLUE));
+        listPions.add(new Pion(3, 2, Color.BLUE));
+        listPions.add(new Pion(4, 2, Color.BLUE));
+        listPions.add(new Pion(5, 2, Color.BLUE));
+        listPions.add(new Pion(6, 2, Color.BLUE));
+    }
 
 }

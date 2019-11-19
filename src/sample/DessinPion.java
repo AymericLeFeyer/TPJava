@@ -10,6 +10,7 @@ public class DessinPion extends Circle {
         super(p.getX(), p.getY(), 10);
         selected = false;
         this.p = p;
+
         setFill(p.getCouleur());
     }
 }
