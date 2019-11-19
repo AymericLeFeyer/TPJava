@@ -59,6 +59,19 @@ class Pion {
         listPions.add(new Pion(4, 2, Color.BLUE));
         listPions.add(new Pion(5, 2, Color.BLUE));
         listPions.add(new Pion(6, 2, Color.BLUE));
+
+        listPions.add(new Pion(1, 5, Color.RED));
+        listPions.add(new Pion(2, 5, Color.RED));
+        listPions.add(new Pion(3, 5, Color.RED));
+        listPions.add(new Pion(4, 5, Color.RED));
+        listPions.add(new Pion(5, 5, Color.RED));
+        listPions.add(new Pion(6, 5, Color.RED));
+        listPions.add(new Pion(1, 6, Color.RED));
+        listPions.add(new Pion(2, 6, Color.RED));
+        listPions.add(new Pion(3, 6, Color.RED));
+        listPions.add(new Pion(4, 6, Color.RED));
+        listPions.add(new Pion(5, 6, Color.RED));
+        listPions.add(new Pion(6, 6, Color.RED));
     }
 
 }
