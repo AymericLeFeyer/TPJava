@@ -1,18 +1,17 @@
 package sample;
 
+import javafx.scene.paint.Color;
 import java.util.List;
-
-enum Couleur {bleu, rouge};
 
 class Pion {
     private int x;
     private int y;
-    private Couleur couleur;
+    private Color couleur;
 
     static List<Pion> listPions;
 
     // Constructors
-    public Pion(int x, int y, Couleur couleur) {
+    public Pion(int x, int y, Color couleur) {
         this.x = x;
         this.y = y;
         this.couleur = couleur;
@@ -27,7 +26,7 @@ class Pion {
         return y;
     }
 
-    public Couleur getCouleur() {
+    public Color getCouleur() {
         return couleur;
     }
 
@@ -40,7 +39,7 @@ class Pion {
         this.y = y;
     }
 
-    public void setCouleur(Couleur couleur) {
+    public void setCouleur(Color couleur) {
         this.couleur = couleur;
     }
 

@@ -14,9 +14,15 @@ public class Main extends Application {
         primaryStage.setTitle("Jeu du Surakarta");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
+
     }
 
     public static void main(String[] args) {
         launch(args);
+
+    }
+
+    public void construirePlateau(Stage primaryStage) {
+
     }
 }
