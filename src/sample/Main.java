@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -11,8 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main extends Application {
     private List<DessinPion> dessinPions;
@@ -25,7 +25,7 @@ public class Main extends Application {
     private final Color couleur1 = Color.YELLOW;
     private final Color couleur2 = Color.GREEN;
 
-    private List<Circle> rondsPossible;
+    private Circle[][] rondsPossible;
 
     DessinPion ps;
 
@@ -150,6 +150,16 @@ public class Main extends Application {
 
             }
         }
+        rondsPossible=new Circle[6][6];
+
+        for (int i = 1; i < 7; i++) {
+            for (int j = 1; j < 7; j++) {
+                rondsPossible[i-1][j-1]=new Circle(xPos + i*ecartement, yPos + j*ecartement, radiusPion);
+                rondsPossible[i-1][j-1].setFill(Color.TRANSPARENT);
+                troupe.getChildren().add(rondsPossible[i-1][j-1]);
+
+            }
+        }
         // Affichage des pions
         for (Pion p : Pion.listPions) {
 
@@ -164,23 +174,29 @@ public class Main extends Application {
                 dp.selected = true;
                 ps.setFill(Color.ORANGE);
 
-                for (int i = -1; i <= 1; i++) {
-                    for (int j = -1; j <= 1; j++) {
-                        if (p.simpleMove(i, j)) {
-                            rondsPossible.add(new Circle());
 
-
-
-                        }
-
-                    }
-                }
                 dp.refresh(xPos, yPos, ecartement);
+
+                verificationCoup(dp.p);
+
+
 
             });
 
             dessinPions.add(dp);
             troupe.getChildren().add(dp);
+        }
+
+
+
+    }
+
+    private void verificationCoup(Pion p) {
+        for (int i = 1; i < 7; i++) {
+            for (int j = 1; j < 7; j++) {
+                if(p.isMovePossible(i,j))rondsPossible[i-1][j-1].setFill(Color.YELLOW);
+                else rondsPossible[i-1][j-1].setFill(Color.WHITE);
+            }
         }
     }
 }

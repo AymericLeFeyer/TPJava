@@ -5,6 +5,8 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 class Pion {
     private int x;
     private int y;
@@ -75,14 +77,19 @@ class Pion {
     }
 
     boolean simpleMove(int x, int y) {
-        boolean occupe = false;
         for (Pion p : listPions) {
-            if ((p.x == this.x + x) && (p.y == this.y + y)) {
-                occupe = true;
-                break;
+            if (p.x == x && p.y == y) {
+                return false;
             }
         }
-        return !occupe;
+        if (((abs(x - this.x) == 1) && (abs(y - this.y) == 1)) || ((abs(x - this.x) == 0) && (abs(y - this.y) == 1)) || ((abs(x - this.x) == 1) && (abs(y - this.y) == 0))) {
+            return true;
+        }
+
+        return false;
     }
 
+    public boolean isMovePossible(int i, int j) {
+        return simpleMove(i, j);
+    }
 }
