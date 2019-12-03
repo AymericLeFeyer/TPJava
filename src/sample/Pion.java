@@ -82,12 +82,7 @@ class Pion {
                 break;
             }
         }
-        if (!occupe) {
-            this.x += x;
-            this.y += y;
-            return true;
-        }
-        return false;
+        return !occupe;
     }
 
 }

@@ -14,9 +14,13 @@ public class DessinPion extends Circle {
         selected = false;
         this.p = p;
 
-
-
         setFill(p.getCouleur());
+    }
+
+    public void refresh(int xPos, int yPos, int taille) {
+        this.setCenterX(xPos + p.getX() * taille);
+        this.setCenterY(yPos + p.getY() * taille);
+
     }
 
 

@@ -8,10 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -27,6 +24,8 @@ public class Main extends Application {
 
     private final Color couleur1 = Color.YELLOW;
     private final Color couleur2 = Color.GREEN;
+
+    private List<Circle> rondsPossible;
 
     DessinPion ps;
 
@@ -165,7 +164,18 @@ public class Main extends Application {
                 dp.selected = true;
                 ps.setFill(Color.ORANGE);
 
-                System.out.println(p.simpleMove(1, 0));
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        if (p.simpleMove(i, j)) {
+                            rondsPossible.add(new Circle());
+
+
+
+                        }
+
+                    }
+                }
+                dp.refresh(xPos, yPos, ecartement);
 
             });
 
