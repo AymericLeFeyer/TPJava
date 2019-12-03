@@ -1,10 +1,12 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
@@ -26,6 +28,8 @@ public class Main extends Application {
     private final Color couleur1 = Color.YELLOW;
     private final Color couleur2 = Color.GREEN;
 
+    DessinPion ps;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         dessinPions = new ArrayList<>();
@@ -40,7 +44,7 @@ public class Main extends Application {
     public void construirePlateau(Stage primaryStage) {
 
         Group troupe = new Group();
-        Scene scene = new Scene(troupe, 600 , 600, Color.BLACK);
+        Scene scene = new Scene(troupe, 600, 600, Color.BLACK);
         // definir les acteurs et les habiller
         dessinEnv(troupe);
 
@@ -61,8 +65,8 @@ public class Main extends Application {
             if (i == 1) c = couleur1;
             else c = Color.WHITE;
 
-            Line l1 = new Line(xPos + ecartement,yPos + ecartement*i,xPos + ecartement*6,yPos + ecartement*i);
-            Line l2 = new Line(xPos + ecartement*i,yPos + ecartement,xPos + ecartement*i,yPos +ecartement*6);
+            Line l1 = new Line(xPos + ecartement, yPos + ecartement * i, xPos + ecartement * 6, yPos + ecartement * i);
+            Line l2 = new Line(xPos + ecartement * i, yPos + ecartement, xPos + ecartement * i, yPos + ecartement * 6);
             l1.setStroke(Color.WHITE);
             l2.setStroke(Color.WHITE);
             l1.setStrokeWidth(lineWidth);
@@ -81,50 +85,50 @@ public class Main extends Application {
 
         }
         // Affichage des arcs
-        Arc arc1 = new Arc(ecartement + xPos, ecartement + yPos, ecartement , ecartement, 0, 270);
+        Arc arc1 = new Arc(ecartement + xPos, ecartement + yPos, ecartement, ecartement, 0, 270);
         arc1.setType(ArcType.OPEN);
         arc1.setFill(Color.TRANSPARENT);
         arc1.setStroke(couleur1);
         arc1.setStrokeWidth(lineWidth);
 
-        Arc arc2 = new Arc(ecartement * 6 + xPos, ecartement + yPos, ecartement , ecartement, 270, 270);
+        Arc arc2 = new Arc(ecartement * 6 + xPos, ecartement + yPos, ecartement, ecartement, 270, 270);
         arc2.setType(ArcType.OPEN);
         arc2.setFill(Color.TRANSPARENT);
         arc2.setStroke(couleur1);
         arc2.setStrokeWidth(lineWidth);
 
 
-        Arc arc3 = new Arc(ecartement + xPos, ecartement * 6 + yPos, ecartement , ecartement, 90, 270);
+        Arc arc3 = new Arc(ecartement + xPos, ecartement * 6 + yPos, ecartement, ecartement, 90, 270);
         arc3.setType(ArcType.OPEN);
         arc3.setFill(Color.TRANSPARENT);
         arc3.setStroke(couleur1);
         arc3.setStrokeWidth(lineWidth);
 
-        Arc arc4 = new Arc(ecartement * 6 + xPos, ecartement * 6 + yPos, ecartement , ecartement, 180, 270);
+        Arc arc4 = new Arc(ecartement * 6 + xPos, ecartement * 6 + yPos, ecartement, ecartement, 180, 270);
         arc4.setType(ArcType.OPEN);
         arc4.setFill(Color.TRANSPARENT);
         arc4.setStroke(couleur1);
         arc4.setStrokeWidth(lineWidth);
 
-        Arc arc5 = new Arc(ecartement + xPos, ecartement + yPos, 2*ecartement , 2*ecartement, 0, 270);
+        Arc arc5 = new Arc(ecartement + xPos, ecartement + yPos, 2 * ecartement, 2 * ecartement, 0, 270);
         arc5.setType(ArcType.OPEN);
         arc5.setFill(Color.TRANSPARENT);
         arc5.setStroke(couleur2);
         arc5.setStrokeWidth(lineWidth);
 
-        Arc arc6 = new Arc(ecartement * 6 + xPos, ecartement + yPos, 2*ecartement , 2*ecartement, 270, 270);
+        Arc arc6 = new Arc(ecartement * 6 + xPos, ecartement + yPos, 2 * ecartement, 2 * ecartement, 270, 270);
         arc6.setType(ArcType.OPEN);
         arc6.setFill(Color.TRANSPARENT);
         arc6.setStroke(couleur2);
         arc6.setStrokeWidth(lineWidth);
 
-        Arc arc7 = new Arc(ecartement + xPos, ecartement * 6 + yPos, 2*ecartement , 2*ecartement, 90, 270);
+        Arc arc7 = new Arc(ecartement + xPos, ecartement * 6 + yPos, 2 * ecartement, 2 * ecartement, 90, 270);
         arc7.setType(ArcType.OPEN);
         arc7.setFill(Color.TRANSPARENT);
         arc7.setStroke(couleur2);
         arc7.setStrokeWidth(lineWidth);
 
-        Arc arc8 = new Arc(ecartement * 6 + xPos, ecartement * 6 + yPos, 2*ecartement , 2*ecartement, 180, 270);
+        Arc arc8 = new Arc(ecartement * 6 + xPos, ecartement * 6 + yPos, 2 * ecartement, 2 * ecartement, 180, 270);
         arc8.setType(ArcType.OPEN);
         arc8.setFill(Color.TRANSPARENT);
         arc8.setStroke(couleur2);
@@ -140,7 +144,6 @@ public class Main extends Application {
         troupe.getChildren().add(arc8);
 
 
-
         // Affichage des ronds blancs
         for (int i = 1; i < 7; i++) {
             for (int j = 1; j < 7; j++) {
@@ -150,7 +153,22 @@ public class Main extends Application {
         }
         // Affichage des pions
         for (Pion p : Pion.listPions) {
-            DessinPion dp = new DessinPion(p, ecartement, radiusPion-2, xPos, yPos);
+
+            DessinPion dp = new DessinPion(p, ecartement, radiusPion - 2, xPos, yPos);
+            dp.setOnMouseClicked(t -> {
+
+                if (ps != null) {
+                    ps.selected = false;
+                    ps.setFill(ps.p.getCouleur());
+                }
+                ps = dp;
+                dp.selected = true;
+                ps.setFill(Color.ORANGE);
+
+                System.out.println(p.simpleMove(1, 0));
+
+            });
+
             dessinPions.add(dp);
             troupe.getChildren().add(dp);
         }

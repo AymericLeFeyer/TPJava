@@ -74,4 +74,20 @@ class Pion {
         listPions.add(new Pion(6, 6, Color.RED));
     }
 
+    boolean simpleMove(int x, int y) {
+        boolean occupe = false;
+        for (Pion p : listPions) {
+            if ((p.x == this.x + x) && (p.y == this.y + y)) {
+                occupe = true;
+                break;
+            }
+        }
+        if (!occupe) {
+            this.x += x;
+            this.y += y;
+            return true;
+        }
+        return false;
+    }
+
 }

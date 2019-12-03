@@ -1,10 +1,11 @@
 package sample;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class DessinPion extends Circle {
-    private boolean selected;
-    private Pion p;
+    boolean selected;
+    Pion p;
 
 
     public DessinPion(Pion p, int taille, int radius, int xPos, int yPos) {
@@ -13,6 +14,10 @@ public class DessinPion extends Circle {
         selected = false;
         this.p = p;
 
+
+
         setFill(p.getCouleur());
     }
+
+
 }
