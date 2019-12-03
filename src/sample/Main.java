@@ -25,7 +25,7 @@ public class Main extends Application {
     private final Color couleur1 = Color.YELLOW;
     private final Color couleur2 = Color.GREEN;
 
-    private Circle[][] rondsPossible;
+    private Place[][] rondsPossible;
 
     DessinPion ps;
 
@@ -42,6 +42,9 @@ public class Main extends Application {
 
     public void construirePlateau(Stage primaryStage) {
 
+        // Initialisation des pions
+        Pion.initializePions();
+
         Group troupe = new Group();
         Scene scene = new Scene(troupe, 600, 600, Color.BLACK);
         // definir les acteurs et les habiller
@@ -56,8 +59,7 @@ public class Main extends Application {
 
     public void dessinEnv(Group troupe) {
         float lineWidth = 5;
-        // Initialisation des pions
-        Pion.initializePions();
+
         // Affichage des lignes
         Color c = Color.WHITE;
         for (int i = 1; i < 7; i++) {
@@ -150,12 +152,30 @@ public class Main extends Application {
 
             }
         }
-        rondsPossible=new Circle[6][6];
+        rondsPossible=new Place[6][6];
 
         for (int i = 1; i < 7; i++) {
             for (int j = 1; j < 7; j++) {
-                rondsPossible[i-1][j-1]=new Circle(xPos + i*ecartement, yPos + j*ecartement, radiusPion);
+                Place pl=new Place(xPos + i*ecartement, yPos + j*ecartement, radiusPion,i,j);
+                rondsPossible[i-1][j-1]=pl;
+
                 rondsPossible[i-1][j-1].setFill(Color.TRANSPARENT);
+                rondsPossible[i-1][j-1].setOnMouseClicked(e->{
+                    if(ps!=null){
+                        int destX=pl.getX();
+                        int destY=pl.getY();
+
+                        if(ps.p.isMovePossible(destX,destY)){
+                            ps.p.move(destX,destY);
+                            ps.refresh(xPos,yPos,ecartement);
+                            ps.selected = false;
+                            ps.setFill(ps.p.getCouleur());
+                            ps=null;
+                            affichageCoupPossible(ps);
+
+                        }
+                    }
+                });
                 troupe.getChildren().add(rondsPossible[i-1][j-1]);
 
             }
@@ -166,19 +186,39 @@ public class Main extends Application {
             DessinPion dp = new DessinPion(p, ecartement, radiusPion - 2, xPos, yPos);
             dp.setOnMouseClicked(t -> {
 
-                if (ps != null) {
-                    ps.selected = false;
-                    ps.setFill(ps.p.getCouleur());
+                if (ps == null) {
+                    ps = dp;
+
+
+
                 }
-                ps = dp;
-                dp.selected = true;
-                ps.setFill(Color.ORANGE);
 
 
-                dp.refresh(xPos, yPos, ecartement);
+                if(ps!=null){
 
-                verificationCoup(dp.p);
+                    if(ps.p.getCouleur()!=dp.p.getCouleur()){
+                        if(ps.p.isMovePossible(dp.p.getX(),dp.p.getY())){
+                            Pion.listPions.remove(dp.p);
+                            troupe.getChildren().remove(dp);
+                            ps.p.move(dp.p.getX(),dp.p.getY());
+                            ps.refresh(xPos,yPos,ecartement);
+                            ps.selected = false;
+                            ps.setFill(ps.p.getCouleur());
+                            ps=null;
+                        }
+                    }
+                    else{
+                        ps.selected = false;
+                        ps.setFill(ps.p.getCouleur());
+                        ps = dp;
+                        ps.selected = true;
+                        ps.setFill(Color.ORANGE);
+                        ps.refresh(xPos, yPos, ecartement);
 
+
+                    }
+                }
+                affichageCoupPossible(ps);
 
 
             });
@@ -191,10 +231,10 @@ public class Main extends Application {
 
     }
 
-    private void verificationCoup(Pion p) {
+    private void affichageCoupPossible(DessinPion dp) {
         for (int i = 1; i < 7; i++) {
             for (int j = 1; j < 7; j++) {
-                if(p.isMovePossible(i,j))rondsPossible[i-1][j-1].setFill(Color.YELLOW);
+                if( ps!=null && dp.p.isMovePossible(i,j)  )rondsPossible[i-1][j-1].setFill(Color.YELLOW);
                 else rondsPossible[i-1][j-1].setFill(Color.WHITE);
             }
         }
