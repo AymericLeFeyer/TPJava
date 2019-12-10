@@ -14,17 +14,43 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
+/**
+ * Représentation graphique du surakarta
+ */
 public class Main extends Application {
+    /**
+     * Liste de la réprésentation des pions
+     */
     private List<DessinPion> dessinPions;
+    /**
+     * écartement entre les pions
+     */
     private final int ecartement = 60;
+    /**
+     * Rayon des pions
+     */
     private final int radiusPion = 15;
-
+    /**
+     * Décalage par rapport au bord gauche de la fenêtre
+     */
     private final int xPos = 100;
+    /**
+     * Décalage par rapport au bord droite de la fenêtre
+     */
     private final int yPos = 100;
 
+    /**
+     * couleur de l'arc 1
+     */
     private final Color couleur1 = Color.YELLOW;
+    /**
+     * couleur de l'arc 2
+     */
     private final Color couleur2 = Color.GREEN;
 
+    /**
+     * Représente les cercles derrière les pions de couleur blanche ou rose si le mouvement est possible depuis le pion selectioné
+     */
     private Place[][] rondsPossible;
 
     DessinPion ps;
@@ -40,13 +66,17 @@ public class Main extends Application {
         launch(args);
     }
 
+    /**
+     * Constructiion du plateau
+     * @param primaryStage
+     */
     public void construirePlateau(Stage primaryStage) {
 
         // Initialisation des pions
         Pion.initializePions();
 
         Group troupe = new Group();
-        Scene scene = new Scene(troupe, 600, 600, Color.BLACK);
+        Scene scene = new Scene(troupe, 630, 630, Color.BLACK);
         // definir les acteurs et les habiller
         dessinEnv(troupe);
 
@@ -57,6 +87,10 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Construction de tous elements graphique nécessaire à l'affichage du surakarta
+     * @param troupe permet d'ajouter les élements à la scéne
+     */
     public void dessinEnv(Group troupe) {
         float lineWidth = 5;
 
@@ -166,6 +200,7 @@ public class Main extends Application {
                         int destY=pl.getY();
 
                         if(ps.p.isMovePossible(destX,destY)){
+                            //si la pièce d'arrivé est vide on déplace le pion si le mouvement est possible
                             ps.p.move(destX,destY);
                             ps.refresh(xPos,yPos,ecartement);
                             ps.selected = false;
@@ -180,6 +215,9 @@ public class Main extends Application {
 
             }
         }
+
+
+
         // Affichage des pions
         for (Pion p : Pion.listPions) {
 
@@ -189,7 +227,7 @@ public class Main extends Application {
                 if (ps == null) {
                     ps = dp;
 
-
+                    ps.p.boucleMove(1,2);
 
                 }
 
@@ -197,7 +235,9 @@ public class Main extends Application {
                 if(ps!=null){
 
                     if(ps.p.getCouleur()!=dp.p.getCouleur()){
+
                         if(ps.p.isMovePossible(dp.p.getX(),dp.p.getY())){
+                            //on supprime le pion ecrasé et on bouge le pion selectioné
                             Pion.listPions.remove(dp.p);
                             troupe.getChildren().remove(dp);
                             ps.p.move(dp.p.getX(),dp.p.getY());
@@ -208,6 +248,7 @@ public class Main extends Application {
                         }
                     }
                     else{
+
                         ps.selected = false;
                         ps.setFill(ps.p.getCouleur());
                         ps = dp;
@@ -231,12 +272,18 @@ public class Main extends Application {
 
     }
 
+
+    /**
+     * Change la couleur des places si le coup est possible à partir d'un pion
+     * @param dp pion selectionée dont on souhaite afficher les coups possible
+     */
     private void affichageCoupPossible(DessinPion dp) {
         for (int i = 1; i < 7; i++) {
             for (int j = 1; j < 7; j++) {
-                if( ps!=null && dp.p.isMovePossible(i,j)  )rondsPossible[i-1][j-1].setFill(Color.YELLOW);
+                if( ps!=null && dp.p.isMovePossible(i,j)  )rondsPossible[i-1][j-1].setFill(Color.HOTPINK);
                 else rondsPossible[i-1][j-1].setFill(Color.WHITE);
             }
         }
     }
+
 }
