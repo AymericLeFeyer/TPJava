@@ -227,7 +227,7 @@ public class Main extends Application {
                 if (ps == null) {
                     ps = dp;
 
-                    ps.p.boucleMove(1,2);
+                    //ps.p.boucleMove(1,2);
 
                 }
 
