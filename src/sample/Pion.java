@@ -131,7 +131,7 @@ class Pion {
         this.x = x;
         this.y = y;
         Main.noTour++;
-        bestMoveIA();
+//        bestMoveIA();
         System.out.println(Main.noTour);
     }
 
