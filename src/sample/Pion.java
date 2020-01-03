@@ -65,7 +65,7 @@ class Pion {
     /**
      * Méthode permettant de d'initialiser un tableau de pion qu'on va utiliser par la suite pendant le jeu
      */
-        static void initializePions() {
+    static void initializePions() {
         listPions.add(new Pion(1, 1, Color.BLUE));
         listPions.add(new Pion(2, 1, Color.BLUE));
         listPions.add(new Pion(3, 1, Color.BLUE));
@@ -96,6 +96,7 @@ class Pion {
 
     /**
      * Cette méthode permet de savoir si le pion peut se déplacer en X,Y  en utilisant un mouvement simple c'est à dire un mouvement de 1 case autour de lui
+     *
      * @param x Coordonées X ou l'on veut déplacer le pion
      * @param y Coordonées Y ou l'on veut déplacer le pion
      * @return renvoie un booléen en fonction de la possibilité du mouvement simple
@@ -110,27 +111,31 @@ class Pion {
     }
 
     /**
-     *Nous décris si un move en x y est possible à partir du pion
+     * Nous décris si un move en x y est possible à partir du pion
+     *
      * @param i Coordonées X ou l'on veut déplacer le pion
      * @param j Coordonées Y ou l'on veut déplacer le pion
      * @return renvoie un booléen si l'on peut déplace le pion en X,Y en utilisant sois le mouvement simple sois le mouvement en boucle
      */
     public boolean isMovePossible(int i, int j) {
-        return simpleMove(i, j) || petitBoucleMove(i, j) || grandeBoucleMove(i,j);
+        return simpleMove(i, j) || petitBoucleMove(i, j) || grandeBoucleMove(i, j);
     }
 
     /**
      * Déplace le pion
+     *
      * @param x Coordonées X ou l'on veut déplacer le pion
      * @param y Coordonées Y ou l'on veut déplacer le pion
      */
     public void move(int x, int y) {
         this.x = x;
         this.y = y;
+        Main.noTour++;
+        bestMoveIA();
+        System.out.println(Main.noTour);
     }
 
     /**
-     *
      * @param x coordonnée en x que l'on souhaite verifié
      * @param y coordonnée en y que l'on souhaite verifié
      * @return retourne vraie si les coordonnées du pion sont égals à celle passé en paramètre
@@ -142,6 +147,7 @@ class Pion {
 
     /**
      * Cette méthode permet de savoir si le pion peut se déplacer en X,Y  en utilisant un mouvement en petite boucle
+     *
      * @param x Coordonées X ou l'on veut déplacer le pion
      * @param y Coordonées Y ou l'on veut déplacer le pion
      * @return renvoie un booléen en fonction de la possibilité du mouvement en boucle
@@ -149,7 +155,7 @@ class Pion {
 
 
     public boolean petitBoucleMove(int x, int y) {
-        if(this.x ==x || this.y==y)return false;
+        if (this.x == x || this.y == y) return false;
 
         int[][] listeCoordonnée = {
                 {2, 1},
@@ -198,15 +204,16 @@ class Pion {
             return false;
         }
 
-        boolean aller=true;
-        boolean retour=true;
+        boolean aller = true;
+        boolean retour = true;
 
-        for (int i = idPion+1; i < 23; i++) {
-            if(aller){
+        for (int i = idPion + 1; i < 23; i++) {
+            if (aller) {
                 for (Pion p : listPions) {
-                    if(aller){
-                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y)) aller=false;
-                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur!=this.couleur) return true;
+                    if (aller) {
+                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y)) aller = false;
+                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur != this.couleur)
+                            return true;
 
                     }
 
@@ -216,37 +223,40 @@ class Pion {
 
         }
 
-        if(aller){
-            for (int i = 0; i < idPion-1; i++) {
+        if (aller) {
+            for (int i = 0; i < idPion - 1; i++) {
                 for (Pion p : listPions) {
-                    if(aller){
-                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) &&!p.equals(x, y))aller=false;
-                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur!=this.couleur ) return true;
+                    if (aller) {
+                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y)) aller = false;
+                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur != this.couleur)
+                            return true;
                     }
                 }
             }
         }
 
 
-        for (int i = idPion-1; i >= 0; i--) {
+        for (int i = idPion - 1; i >= 0; i--) {
 
             for (Pion p : listPions) {
 
-                if(retour){
-                    if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y) )retour=false;
-                    else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur!=this.couleur) return true;
+                if (retour) {
+                    if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y)) retour = false;
+                    else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur != this.couleur)
+                        return true;
                 }
 
             }
         }
 
 
-        if(retour){
+        if (retour) {
             for (int i = 22; i > idPion; i--) {
                 for (Pion p : listPions) {
-                    if(retour){
-                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y) )retour=false;
-                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur!=this.couleur) return true;
+                    if (retour) {
+                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y)) retour = false;
+                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur != this.couleur)
+                            return true;
                     }
 
                 }
@@ -262,41 +272,42 @@ class Pion {
 
     /**
      * Cette méthode permet de savoir si le pion peut se déplacer en X,Y  en utilisant un mouvement en grande boucle
+     *
      * @param x Coordonées X ou l'on veut déplacer le pion
      * @param y Coordonées Y ou l'on veut déplacer le pion
      * @return renvoie un booléen en fonction de la possibilité du mouvement en boucle
      */
     public boolean grandeBoucleMove(int x, int y) {
-        if(this.x ==x || this.y==y)return false;
+        if (this.x == x || this.y == y) return false;
 
         int[][] listeCoordonnée = {
-                {3,1},
-                {3,2},
-                {3,3},
-                {3,4},
-                {3,5},
-                {3,6},
+                {3, 1},
+                {3, 2},
+                {3, 3},
+                {3, 4},
+                {3, 5},
+                {3, 6},
 
-                {1,4},
-                {2,4},
-                {3,4},
-                {4,4},
-                {5,4},
-                {6,4},
+                {1, 4},
+                {2, 4},
+                {3, 4},
+                {4, 4},
+                {5, 4},
+                {6, 4},
 
-                {4,6},
-                {4,5},
-                {4,4},
-                {4,3},
-                {4,2},
-                {4,1},
+                {4, 6},
+                {4, 5},
+                {4, 4},
+                {4, 3},
+                {4, 2},
+                {4, 1},
 
-                {6,3},
-                {5,3},
-                {4,3},
-                {3,3},
-                {2,3},
-                {1,3},
+                {6, 3},
+                {5, 3},
+                {4, 3},
+                {3, 3},
+                {2, 3},
+                {1, 3},
 
         };
 
@@ -317,15 +328,16 @@ class Pion {
             return false;
         }
 
-        boolean aller=true;
-        boolean retour=true;
+        boolean aller = true;
+        boolean retour = true;
 
-        for (int i = idPion+1; i < 24; i++) {
-            if(aller){
+        for (int i = idPion + 1; i < 24; i++) {
+            if (aller) {
                 for (Pion p : listPions) {
-                    if(aller){
-                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y)) aller=false;
-                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur!=this.couleur) return true;
+                    if (aller) {
+                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y)) aller = false;
+                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur != this.couleur)
+                            return true;
 
                     }
 
@@ -335,37 +347,40 @@ class Pion {
 
         }
 
-        if(aller){
-            for (int i = 0; i < idPion-1; i++) {
+        if (aller) {
+            for (int i = 0; i < idPion - 1; i++) {
                 for (Pion p : listPions) {
-                    if(aller){
-                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) &&!p.equals(x, y))aller=false;
-                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur!=this.couleur ) return true;
+                    if (aller) {
+                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y)) aller = false;
+                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur != this.couleur)
+                            return true;
                     }
                 }
             }
         }
 
 
-        for (int i = idPion-1; i >= 0; i--) {
+        for (int i = idPion - 1; i >= 0; i--) {
 
             for (Pion p : listPions) {
 
-                if(retour){
-                    if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y) )retour=false;
-                    else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur!=this.couleur) return true;
+                if (retour) {
+                    if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y)) retour = false;
+                    else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur != this.couleur)
+                        return true;
                 }
 
             }
         }
 
 
-        if(retour){
+        if (retour) {
             for (int i = 23; i > idPion; i--) {
                 for (Pion p : listPions) {
-                    if(retour){
-                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y) )retour=false;
-                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur!=this.couleur) return true;
+                    if (retour) {
+                        if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && !p.equals(x, y)) retour = false;
+                        else if (p.equals(listeCoordonnée[i][0], listeCoordonnée[i][1]) && p.equals(x, y) && p.couleur != this.couleur)
+                            return true;
                     }
 
                 }
@@ -376,6 +391,51 @@ class Pion {
 
         return false;
 
+
+    }
+
+    /**
+     * Cette méthode parcours tous les pions et fais le meilleur coup possible
+     * Si un pion peux prendre, c'est un bon coup
+     * Sinon on prend un pion random et il fais une action random
+     */
+    public static void bestMoveIA() {
+        boolean moved = false;
+        int x, y;
+        for (Pion p : Pion.listPions) {
+            for (Pion p2 : Pion.listPions) {
+                if (!moved){
+                    if (!p.equals(p2) && p.couleur == Color.BLUE) {
+                        // On teste les boucles
+                        if (p.petitBoucleMove(p2.x, p2.y)){
+                            p.move(p2.x, p2.y);
+                            moved = true;
+                        }
+                        else if (p.grandeBoucleMove(p2.x, p2.y)) {
+                            p.move(p2.x, p2.y);
+                            moved = true;
+                        }
+                    }
+                }
+
+            }
+        }
+        // Si les boucles ne passent pas, on avance un pion au hasard
+
+//        while (!moved) {
+//            Pion p3 = Pion.listPions.get((int) (Math.random()*Pion.listPions.size()));
+//            if (p3.couleur == Color.RED) {
+//                x = (int) (Math.random() * (2)) - 1;
+//                y = (int) (Math.random() * (2)) - 1;
+//                if (p3.simpleMove(p3.x - x, p3.y - y)) {
+//                    p3.move(p3.x - x,p3.y - y);
+//                    moved = true;
+//                }
+//
+//            }
+//
+//        }
+        Main.noTour++;
 
     }
 
