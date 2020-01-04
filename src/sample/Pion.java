@@ -1,7 +1,13 @@
 package sample;
 
+import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -376,6 +382,28 @@ class Pion {
         }
 
         return false;
+
+
+    }
+
+    public static void victoire(int c, Group troupe) throws FileNotFoundException {
+        Image image;
+
+        switch (c) {
+            case 0:
+                image = new Image(new FileInputStream("res/victoireBleue.png"));
+                break;
+            case 1:
+                image = new Image(new FileInputStream("res/victoireRouge.png"));
+                break;
+            default:
+                image = null;
+                break;
+        }
+        ImageView imageView = new ImageView(image);
+        troupe.getChildren().add(imageView);
+
+
 
 
     }

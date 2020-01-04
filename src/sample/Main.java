@@ -1,6 +1,5 @@
 package sample;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.util.LineInputStream;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -15,6 +14,7 @@ import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -75,7 +75,7 @@ public class Main extends Application {
      * Constructiion du plateau
      * @param primaryStage
      */
-    public void construirePlateau(Stage primaryStage) {
+    public void construirePlateau(Stage primaryStage) throws FileNotFoundException {
         couleurJoueur=Color.BLUE;
         // Initialisation des pions
         Pion.initializePions();
@@ -84,6 +84,7 @@ public class Main extends Application {
         Scene scene = new Scene(troupe, 630, 630, Color.BLACK);
         // definir les acteurs et les habiller
         dessinEnv(troupe);
+
 
         primaryStage.setTitle("Jeu du Surakarta");
         primaryStage.setScene(scene);
@@ -96,7 +97,7 @@ public class Main extends Application {
      * Construction de tous elements graphique nécessaire à l'affichage du surakarta
      * @param troupe permet d'ajouter les élements à la scéne
      */
-    public void dessinEnv(Group troupe) {
+    public void dessinEnv(Group troupe) throws FileNotFoundException {
         float lineWidth = 5;
 
         // Affichage des lignes
@@ -184,6 +185,8 @@ public class Main extends Application {
         troupe.getChildren().add(arc8);
 
 
+
+
         // Affichage des ronds blancs
         for (int i = 1; i < 7; i++) {
             for (int j = 1; j < 7; j++) {
@@ -211,7 +214,11 @@ public class Main extends Application {
 
                             if(couleurJoueur==Color.BLUE){
                                 couleurJoueur=Color.RED;
-                                jouerIA(troupe);
+                                try {
+                                    jouerIA(troupe);
+                                } catch (FileNotFoundException ex) {
+                                    ex.printStackTrace();
+                                }
                                 couleurJoueur=Color.BLUE;
                             }
                             else couleurJoueur=Color.BLUE;
@@ -250,7 +257,11 @@ public class Main extends Application {
                             if(couleurJoueur==Color.BLUE){
                                 couleurJoueur=Color.RED;
 
-                                jouerIA(troupe);
+                                try {
+                                    jouerIA(troupe);
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
                                 couleurJoueur=Color.BLUE;
                             }
                             else couleurJoueur=Color.BLUE;
@@ -275,8 +286,9 @@ public class Main extends Application {
 
             dessinPions.add(dp);
             troupe.getChildren().add(dp);
-        }
 
+
+        }
 
 
     }
@@ -295,7 +307,20 @@ public class Main extends Application {
         }
     }
 
-    private void jouerIA(Group troupe) {
+    private void testVictoire(Group troupe) throws FileNotFoundException {
+        int nbPionRouge = 0;
+        int nbPionBleu = 0;
+        for (Pion p : Pion.listPions) {
+            if (p.getCouleur() == Color.BLUE) nbPionBleu++;
+            if (p.getCouleur() == Color.RED) nbPionRouge++;
+        }
+        if (nbPionBleu == 1) Pion.victoire(1, troupe);
+        if (nbPionRouge == 1) Pion.victoire(0, troupe);
+        System.out.println("bleu:"+nbPionBleu);
+        System.out.println("rouge:"+nbPionRouge);
+    }
+
+    private void jouerIA(Group troupe) throws FileNotFoundException {
         DessinPion dpp = null;
         DessinPion ppp = null;
 
@@ -313,6 +338,7 @@ public class Main extends Application {
 
             if (ppp != null && dpp != null) {
                 System.out.println(ppp.p.getX() + " " + ppp.p.getY() + " prends " + dpp.p.getX() + " " + dpp.p.getY());
+                testVictoire(troupe);
 
                 mange(ppp, dpp, troupe);
                 return;
