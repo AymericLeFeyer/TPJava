@@ -38,6 +38,11 @@ public class Main extends Application {
      * Décalage par rapport au bord droite de la fenêtre
      */
     private final int yPos = 100;
+    /**
+     * Numero du tour actuel
+     * Le joueur joue les tours impairs
+     */
+    public static int noTour = 1;
 
     /**
      * couleur de l'arc 1
@@ -68,6 +73,7 @@ public class Main extends Application {
 
     /**
      * Constructiion du plateau
+     *
      * @param primaryStage
      */
     public void construirePlateau(Stage primaryStage) {
@@ -89,6 +95,7 @@ public class Main extends Application {
 
     /**
      * Construction de tous elements graphique nécessaire à l'affichage du surakarta
+     *
      * @param troupe permet d'ajouter les élements à la scéne
      */
     public void dessinEnv(Group troupe) {
@@ -186,36 +193,35 @@ public class Main extends Application {
 
             }
         }
-        rondsPossible=new Place[6][6];
+        rondsPossible = new Place[6][6];
 
         for (int i = 1; i < 7; i++) {
             for (int j = 1; j < 7; j++) {
-                Place pl=new Place(xPos + i*ecartement, yPos + j*ecartement, radiusPion,i,j);
-                rondsPossible[i-1][j-1]=pl;
+                Place pl = new Place(xPos + i * ecartement, yPos + j * ecartement, radiusPion, i, j);
+                rondsPossible[i - 1][j - 1] = pl;
 
-                rondsPossible[i-1][j-1].setFill(Color.TRANSPARENT);
-                rondsPossible[i-1][j-1].setOnMouseClicked(e->{
-                    if(ps!=null){
-                        int destX=pl.getX();
-                        int destY=pl.getY();
+                rondsPossible[i - 1][j - 1].setFill(Color.TRANSPARENT);
+                rondsPossible[i - 1][j - 1].setOnMouseClicked(e -> {
+                    if (ps != null) {
+                        int destX = pl.getX();
+                        int destY = pl.getY();
 
-                        if(ps.p.isMovePossible(destX,destY)){
+                        if (ps.p.isMovePossible(destX, destY)) {
                             //si la pièce d'arrivé est vide on déplace le pion si le mouvement est possible
-                            ps.p.move(destX,destY);
-                            ps.refresh(xPos,yPos,ecartement);
+                            ps.p.move(destX, destY);
+                            ps.refresh(xPos, yPos, ecartement);
                             ps.selected = false;
                             ps.setFill(ps.p.getCouleur());
-                            ps=null;
+                            ps = null;
                             affichageCoupPossible(ps);
 
                         }
                     }
                 });
-                troupe.getChildren().add(rondsPossible[i-1][j-1]);
+                troupe.getChildren().add(rondsPossible[i - 1][j - 1]);
 
             }
         }
-
 
 
         // Affichage des pions
@@ -232,22 +238,21 @@ public class Main extends Application {
                 }
 
 
-                if(ps!=null){
+                if (ps != null) {
 
-                    if(ps.p.getCouleur()!=dp.p.getCouleur()){
+                    if (ps.p.getCouleur() != dp.p.getCouleur()) {
 
-                        if(ps.p.isMovePossible(dp.p.getX(),dp.p.getY())){
+                        if (ps.p.isMovePossible(dp.p.getX(), dp.p.getY())) {
                             //on supprime le pion ecrasé et on bouge le pion selectioné
                             Pion.listPions.remove(dp.p);
                             troupe.getChildren().remove(dp);
-                            ps.p.move(dp.p.getX(),dp.p.getY());
-                            ps.refresh(xPos,yPos,ecartement);
+                            ps.p.move(dp.p.getX(), dp.p.getY());
+                            ps.refresh(xPos, yPos, ecartement);
                             ps.selected = false;
                             ps.setFill(ps.p.getCouleur());
-                            ps=null;
+                            ps = null;
                         }
-                    }
-                    else{
+                    } else {
 
                         ps.selected = false;
                         ps.setFill(ps.p.getCouleur());
@@ -258,6 +263,7 @@ public class Main extends Application {
 
 
                     }
+
                 }
                 affichageCoupPossible(ps);
 
@@ -269,19 +275,19 @@ public class Main extends Application {
         }
 
 
-
     }
 
 
     /**
      * Change la couleur des places si le coup est possible à partir d'un pion
+     *
      * @param dp pion selectionée dont on souhaite afficher les coups possible
      */
     private void affichageCoupPossible(DessinPion dp) {
         for (int i = 1; i < 7; i++) {
             for (int j = 1; j < 7; j++) {
-                if( ps!=null && dp.p.isMovePossible(i,j)  )rondsPossible[i-1][j-1].setFill(Color.HOTPINK);
-                else rondsPossible[i-1][j-1].setFill(Color.WHITE);
+                if (ps != null && dp.p.isMovePossible(i, j)) rondsPossible[i - 1][j - 1].setFill(Color.HOTPINK);
+                else rondsPossible[i - 1][j - 1].setFill(Color.WHITE);
             }
         }
     }
