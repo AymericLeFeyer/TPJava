@@ -76,7 +76,7 @@ class Pion {
         listPions.add(new Pion(2, 2, Color.BLUE));
         listPions.add(new Pion(3, 2, Color.BLUE));
         listPions.add(new Pion(4, 2, Color.BLUE));
-        listPions.add(new Pion(5, 4, Color.BLUE));
+        listPions.add(new Pion(5, 2, Color.BLUE));
         listPions.add(new Pion(6, 2, Color.BLUE));
 
         listPions.add(new Pion(1, 5, Color.RED));
@@ -101,8 +101,9 @@ class Pion {
      * @return renvoie un booléen en fonction de la possibilité du mouvement simple
      */
     boolean simpleMove(int x, int y) {
+        if(x==0 || y==0)return false;
         for (Pion p : listPions) {
-            if (p.x == x && p.y == y && p.getCouleur() == this.getCouleur()) {
+            if (p.x == x && p.y == y ) {
                 return false;
             }
         }

@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.*;
 
@@ -53,6 +55,8 @@ public class Main extends Application {
      */
     private Place[][] rondsPossible;
 
+    Color couleurJoueur;
+
     DessinPion ps;
 
     @Override
@@ -71,7 +75,7 @@ public class Main extends Application {
      * @param primaryStage
      */
     public void construirePlateau(Stage primaryStage) {
-
+        couleurJoueur=Color.BLUE;
         // Initialisation des pions
         Pion.initializePions();
 
@@ -201,12 +205,15 @@ public class Main extends Application {
 
                         if(ps.p.isMovePossible(destX,destY)){
                             //si la pièce d'arrivé est vide on déplace le pion si le mouvement est possible
-                            ps.p.move(destX,destY);
-                            ps.refresh(xPos,yPos,ecartement);
-                            ps.selected = false;
-                            ps.setFill(ps.p.getCouleur());
-                            ps=null;
+                           move(ps,destX,destY);
                             affichageCoupPossible(ps);
+
+                            if(couleurJoueur==Color.BLUE){
+                                couleurJoueur=Color.RED;
+                                jouerIA(troupe);
+                                couleurJoueur=Color.BLUE;
+                            }
+                            else couleurJoueur=Color.BLUE;
 
                         }
                     }
@@ -224,7 +231,7 @@ public class Main extends Application {
             DessinPion dp = new DessinPion(p, ecartement, radiusPion - 2, xPos, yPos);
             dp.setOnMouseClicked(t -> {
 
-                if (ps == null) {
+                if (ps == null && dp.p.getCouleur()==couleurJoueur) {
                     ps = dp;
 
                     //ps.p.boucleMove(1,2);
@@ -237,14 +244,15 @@ public class Main extends Application {
                     if(ps.p.getCouleur()!=dp.p.getCouleur()){
 
                         if(ps.p.isMovePossible(dp.p.getX(),dp.p.getY())){
-                            //on supprime le pion ecrasé et on bouge le pion selectioné
-                            Pion.listPions.remove(dp.p);
-                            troupe.getChildren().remove(dp);
-                            ps.p.move(dp.p.getX(),dp.p.getY());
-                            ps.refresh(xPos,yPos,ecartement);
-                            ps.selected = false;
-                            ps.setFill(ps.p.getCouleur());
-                            ps=null;
+
+                            mange(ps,dp,troupe);
+                            if(couleurJoueur==Color.BLUE){
+                                couleurJoueur=Color.RED;
+
+                                jouerIA(troupe);
+                                couleurJoueur=Color.BLUE;
+                            }
+                            else couleurJoueur=Color.BLUE;
                         }
                     }
                     else{
@@ -285,5 +293,84 @@ public class Main extends Application {
             }
         }
     }
+
+    private void jouerIA(Group troupe) {
+        DessinPion dpp = null;
+        DessinPion ppp = null;
+
+        for (DessinPion pp : dessinPions) {
+            if (pp.p.getCouleur() == Color.RED) {
+                for (DessinPion dp : dessinPions) {
+                    if (pp.p.isMovePossible(dp.p.getX(), dp.p.getY())) {
+                        ppp = pp;
+                        dpp = dp;
+                        break;
+                    }
+
+                }
+            }
+
+            if (ppp != null && dpp != null) {
+                System.out.println(ppp.p.getX() + " " + ppp.p.getY() + " prends " + dpp.p.getX() + " " + dpp.p.getY());
+
+                mange(ppp, dpp, troupe);
+                return;
+            }
+
+
+        }
+
+
+        while (true) {
+            DessinPion p3 = dessinPions.get((int) (Math.random() * dessinPions.size()));
+
+            if (p3.p.getCouleur() == Color.RED) {
+                int x = (int) (Math.random() * (2)) - 1;
+                int y = (int) (Math.random() * (2)) - 1;
+                if (p3.p.simpleMove(p3.p.getX() + x, p3.p.getY() + y)) {
+
+                  //  p3.p.move(p3.p.getX() - x, p3.p.getY() - y);
+                    move(p3,p3.p.getX() + x,p3.p.getY() + y);
+                    return;
+                }
+
+
+
+
+            }
+        }
+
+
+    }
+    private void mange(DessinPion pp ,DessinPion dp,Group troupe){
+        //on supprime le pion ecrasé de la liste
+        Pion.listPions.remove(dp.p);
+        // on supprime sa representation graphique
+        troupe.getChildren().remove(dp);
+        //deplacement
+        pp.p.move(dp.p.getX(),dp.p.getY());
+        pp.refresh(xPos,yPos,ecartement);
+        pp.selected = false;
+        pp.setFill(pp.p.getCouleur());
+
+        ps=null;
+
+    }
+
+    private void move(DessinPion dp,int destX,int destY){
+
+
+            dp.p.move(destX,destY);
+        dp.selected = false;
+
+        dp.refresh(xPos,yPos,ecartement);
+        dp.setFill(dp.p.getCouleur());
+            dp=null;
+            ps=null;
+
+
+    }
+
+
 
 }
