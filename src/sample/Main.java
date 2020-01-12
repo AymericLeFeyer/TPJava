@@ -1,5 +1,6 @@
 package sample;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.util.LineInputStream;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -345,6 +346,7 @@ public class Main extends Application {
     private void mange(DessinPion pp ,DessinPion dp,Group troupe){
         //on supprime le pion ecrasé de la liste
         Pion.listPions.remove(dp.p);
+
         // on supprime sa representation graphique
         troupe.getChildren().remove(dp);
         //deplacement
@@ -352,6 +354,7 @@ public class Main extends Application {
         pp.refresh(xPos,yPos,ecartement);
         pp.selected = false;
         pp.setFill(pp.p.getCouleur());
+        dessinPions.remove(dp);
 
         ps=null;
 
